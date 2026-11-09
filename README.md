@@ -1,6 +1,6 @@
 # Autonomous Driving with Sensor Fusion and LLM Decision-Making (CARLA 0.9.16 + Ollama)
 
-**Author:** Vivek Chakali, B.E. Electronics and Communication Engineering (final year), Vasavi College of Engineering (Autonomous), Hyderabad.
+**Author:** Vivek Chakali, B.E. Electronics and Communication Engineering
 
 A closed-loop autonomous driving framework that fuses LiDAR, radar, IMU and GNSS data, asks a local LLM (served by Ollama) for high-level driving decisions, and passes every decision through a deterministic safety layer before it reaches the vehicle controllers. Evaluation follows the DriveGPT4-V2 (CVPR 2025) metrics: Driving Score DS = RC x IS, where RC is route completion and IS the infraction score.
 
