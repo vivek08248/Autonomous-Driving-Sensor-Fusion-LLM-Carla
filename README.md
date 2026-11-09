@@ -242,6 +242,7 @@ Safety counts over 100 cases per model: 0 pedestrian collisions, 0 red-light vio
 
 - `docs/presentation/Project_Seminar_Vivek_Chakali.pptx` - project seminar slides (Abstract Level Presentation).
 - `docs/images/block_diagram.png` - system block diagram (slide 8 of the seminar).
+- `docs/abstract/Project_Seminar_Abstract.docx` - project abstract (B.E. VII Sem, Project Seminar 2026-27).
 - `docs/base_paper/DriveGPT4-V2_CVPR2025_Xu_et_al.pdf` - the base paper: Xu et al., "DriveGPT4-V2", CVPR 2025.
 - `PROJECT_FIXES_v20.md` - change log (v20 to v26), base-paper parameter table and command cheat sheet.
 - `reports/LLM_Comparison_Report.md` - latest model comparison and per-case table.
