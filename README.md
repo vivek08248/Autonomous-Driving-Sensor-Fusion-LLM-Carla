@@ -4,6 +4,42 @@
 
 A closed-loop autonomous driving framework that fuses LiDAR, radar, IMU and GNSS data, asks a local LLM (served by Ollama) for high-level driving decisions, and passes every decision through a deterministic safety layer before it reaches the vehicle controllers. Evaluation follows the DriveGPT4-V2 (CVPR 2025) metrics: Driving Score DS = RC x IS, where RC is route completion and IS the infraction score.
 
+## Presentation slides
+
+The seminar slides are rendered below (full deck in `docs/presentation/`).
+
+![Slide 1](docs/images/slides/slide_01.png)
+
+![Slide 2](docs/images/slides/slide_02.png)
+
+![Slide 3](docs/images/slides/slide_03.png)
+
+![Slide 4](docs/images/slides/slide_04.png)
+
+![Slide 5](docs/images/slides/slide_05.png)
+
+![Slide 6](docs/images/slides/slide_06.png)
+
+![Slide 7](docs/images/slides/slide_07.png)
+
+![Slide 8](docs/images/slides/slide_08.png)
+
+![Slide 9](docs/images/slides/slide_09.png)
+
+![Slide 10](docs/images/slides/slide_10.png)
+
+![Slide 11](docs/images/slides/slide_11.png)
+
+![Slide 12](docs/images/slides/slide_12.png)
+
+![Slide 13](docs/images/slides/slide_13.png)
+
+![Slide 14](docs/images/slides/slide_14.png)
+
+![Slide 15](docs/images/slides/slide_15.png)
+
+![Slide 16](docs/images/slides/slide_16.png)
+
 ## Architecture
 
 | Layer | Files | Role |
