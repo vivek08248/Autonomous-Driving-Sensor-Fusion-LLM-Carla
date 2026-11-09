@@ -80,7 +80,7 @@ The 100 test cases cover: clear lanes and cruising; static obstacles and bypasse
 | LLM reply time (mean, replies received) | about 0.48 s | about 1.07 s | n/a |
 | LLM share of control steps | 1.3 % | 1.9 % | n/a |
 
-These are short scripted CARLA scenarios and are not directly comparable with the paper's 36 Longest6 routes. The one vehicle collision per model is test case TC_09 (wrong-way oncoming car), recorded before the latest brake-on-oncoming fix. Full tables are in `LLM_Comparison_Report.md` and `drivegpt4_v2_paper_metrics_v2.csv`.
+These are short scripted CARLA scenarios and are not directly comparable with the paper's 36 Longest6 routes. The one vehicle collision per model is test case TC_09 (wrong-way oncoming car), recorded before the latest brake-on-oncoming fix. Full tables are in `reports/LLM_Comparison_Report.md` and `reports/drivegpt4_v2_paper_metrics_v2.csv`.
 
 ## Known limitations
 
@@ -91,7 +91,7 @@ These are short scripted CARLA scenarios and are not directly comparable with th
 ## Documentation
 
 - `PROJECT_FIXES_v20.md` - change log (v20 to v26), base-paper parameter table and command cheat sheet.
-- `LLM_Comparison_Report.md` - latest model comparison and per-case table.
+- `reports/LLM_Comparison_Report.md` - latest model comparison and per-case table.
 
 ## License
 
