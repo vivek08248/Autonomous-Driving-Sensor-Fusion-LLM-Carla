@@ -90,6 +90,53 @@ These are short scripted CARLA scenarios and are not directly comparable with th
 
 Per-test-case numbers are in `reports/drivegpt4_v2_paper_metrics_v2.csv`; the aggregate comparison below is generated from that file.
 
+## Experimental results (from the seminar, updated with the latest run)
+
+### Results table
+
+| Test case | DS | RC (%) | IS | LLM latency (ms) | DAgger (%) | Primary failure mode |
+|---|---|---|---|---|---|---|
+| TC_02 Static obstacle (0.5b) | 100.0 | 100.0 | 1.00 | 444 | 2.2 | None (latency flag only) |
+| TC_03 Rain + obstacle (0.5b) | 100.0 | 100.0 | 1.00 | 521 | 82.5 | None (speed flag only) |
+| TC_09 Wrong-way oncoming (0.5b) | 60.0 | 100.0 | 0.60 | - | 0.0 | 1 vehicle collision |
+| TC_13 Tight corridor (0.5b) | 1.27 | 1.3 | 1.00 | - | 0.0 | Blocked, no safe path |
+| **Mean, 100 cases, qwen2.5:0.5b** | **97.4** | **97.8** | **1.00** | **477** | **2.6** | - |
+| **Mean, 100 cases, qwen2.5:1.5b** | **93.6** | **94.1** | **0.99** | **1074** | **2.6** | - |
+
+Safety counts over 100 cases per model: 0 pedestrian collisions, 0 red-light violations, and 1 vehicle collision (TC_09, logged before the brake-on-oncoming fix). The "Blocked" and "timeout" cases are TC_13 (by design) and TC_79 (0.5b) or TC_66 and TC_79 (1.5b).
+
+### Comparison with the base paper
+
+| Metric | DriveGPT4-V2 (paper) | Ours 0.5b | Ours 1.5b |
+|---|---|---|---|
+| DS ↑ | 70 | 97.4 | 93.6 |
+| RC (%) ↑ | 91 | 97.8 | 94.1 |
+| IS ↑ | 0.77 | 1.00 | 0.99 |
+| Pedestrian collisions ↓ | 0.00 | 0.00 | 0.00 |
+| Vehicle collisions ↓ | 0.80 | 0.01 | 0.01 |
+| Static collisions ↓ | 0.01 | 0.00 | 0.01 |
+| Red-light violations ↓ | 0.04 | 0.00 | 0.00 |
+| Route deviations ↓ | 0.00 | 0.00 | 0.03 |
+| Timeouts ↓ | 0.07 | 0.01 | 0.00 |
+| Agent blocks ↓ | 0.09 | 0.01 | 0.04 |
+
+![Bar chart: DS and RC for DriveGPT4-V2 and our two models](docs/images/results_chart.png)
+
+*Indicative only: the paper reports 36 long Longest6 routes (infraction values are event ratios), while ours are 100 short scripted CARLA scenarios (values are events per episode). Paper values are from Table 2 of Xu et al., CVPR 2025.*
+
+### Key observations
+
+- **Safety first.** No pedestrian or red-light events across 200 episodes. IS is 1.00 for 0.5b and 0.99 for 1.5b, against 0.77 for DriveGPT4-V2.
+- **Cautious, not collision-prone.** The lowest scores come from the TC_13 tight corridor (blocked) and from runs ended early by the operator, not from infractions. Red-light holds (TC_47, TC_49, TC_50, TC_52, TC_54) count as valid waits.
+- **Planner layer dominates the outcome.** The LLM drove only 1.3% (0.5b) and 1.9% (1.5b) of control steps, and DAgger took over 2.6% of steps. The 0.5b vs 1.5b gap comes from blocked or skipped episodes, not model-driven infractions.
+- **Latency is the bottleneck.** LLM replies took 0.34–0.62 s (0.5b) and 0.70–1.98 s (1.5b), a decision rate of 0.14 Hz and 0.07 Hz against a 20 Hz control loop. The LLM therefore works as an advisory layer, and faster or distilled models are needed.
+
+### Conclusion and future scope
+
+**Conclusion.** An LLM-assisted closed-loop driving framework was built and evaluated in CARLA 0.9.16 using the DriveGPT4-V2 metrics. Its best model, qwen2.5:0.5b, reached DS 97.4, RC 97.8% and IS 1.00, with no pedestrian or red-light events. The open issues are one wrong-way collision (TC_09), the TC_13 block and LLM latency of 0.3–2 s.
+
+**Future scope.** Benchmark on CARLA Longest6 / Town05 Long for a like-for-like comparison with the base paper; re-run all 100 cases with the latest planner fixes; reduce LLM latency with GPU inference and distilled models; and move to a Jetson + MCU prototype with LiDAR/ToF, radar, IMU and GNSS fusion.
+
 ### Aggregate comparison (generated from the same CSV)
 
 | Model | Episodes | Mean DS | Mean RC % | Mean IS | Pedestrian coll. | Vehicle coll. | Red-light viol. | Blocked / timeout per 100 | Mean LLM reply (ms) |
