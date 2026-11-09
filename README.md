@@ -2,6 +2,8 @@
 
 **Author:** Vivek Chakali, B.E. Electronics and Communication Engineering
 
+**Team:** Vivek Chakali (1602-23-735-127), P. Naveen (1602-23-735-084), S. Santhosh (1602-23-735-102). Under the guidance of Mr. B. Uma Mahesh Babu, Assistant Professor.
+
 A closed-loop autonomous driving framework that fuses LiDAR, radar, IMU and GNSS data, asks a local LLM (served by Ollama) for high-level driving decisions, and passes every decision through a deterministic safety layer before it reaches the vehicle controllers. Evaluation follows the DriveGPT4-V2 (CVPR 2025) metrics: Driving Score DS = RC x IS, where RC is route completion and IS the infraction score.
 
 ## System block diagram
