@@ -1,0 +1,6 @@
+carla>=0.9.13
+numpy
+opencv-python
+requests
+pyserial
+pillow

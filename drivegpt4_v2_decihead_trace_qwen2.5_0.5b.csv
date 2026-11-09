@@ -1,0 +1,1 @@
+Model,Scenario,Frame,Ego_Speed_kmh,Corridor_LiDAR_m,LLM_Intent,LLM_Target_Speed_kmh,LLM_Latency_ms,Expert_Intent,DeciHead_Target_Speed_kmh,DeciHead_Target_Angle_deg,L1_Speed_Error_kmh,DAgger_Expert_Takeover,LLM_Failure_Mode,Waypoints_8_Future_4s,Route_Points_10_Ahead

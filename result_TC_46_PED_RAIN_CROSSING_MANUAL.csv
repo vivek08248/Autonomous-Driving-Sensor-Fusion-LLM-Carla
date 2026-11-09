@@ -1,0 +1,15 @@
+Elapsed_Time_s,Speed_kmh,LiDAR_Dist_m,LLM_Latency_ms,LLM_Intent,Safety_Intervention_Active,Ambiguity_Detected,Collision_Event
+0.0,23.55,50.0,0.0,MANUAL,False,False,False
+0.1,23.92,50.0,0.0,MANUAL,False,False,False
+0.2,23.94,50.0,0.0,MANUAL,False,False,False
+0.3,23.93,50.0,0.0,MANUAL,False,False,False
+0.4,23.9,50.0,0.0,MANUAL,False,False,False
+0.5,23.88,50.0,0.0,MANUAL,False,False,False
+0.6,23.87,50.0,0.0,MANUAL,False,False,False
+0.0,23.55,50.0,0.0,MANUAL,True,False,False
+0.1,23.92,50.0,0.0,MANUAL,True,False,False
+0.2,23.94,50.0,0.0,MANUAL,True,False,False
+0.3,23.93,50.0,0.0,MANUAL,True,False,False
+0.4,23.9,50.0,0.0,MANUAL,True,False,False
+0.5,23.88,50.0,0.0,MANUAL,True,False,False
+0.6,23.87,50.0,0.0,MANUAL,True,False,False

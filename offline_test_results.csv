@@ -1,0 +1,8 @@
+Scenario,Passed,Score,Collisions,OvertakeStarted,OvertakeCompleted,OvertakePhases,AvgSpeedKmh,MinLidarM
+TC_50_GREEN_TO_RED,False,0.0,114,False,False,,1.2,42.3
+TC_51_RED_TO_GREEN_RESUME,False,0.0,95,False,False,,1.4,50.0
+TC_52_RED_WITH_QUEUE,False,0.0,136,False,False,,0.6,17.6
+TC_53_GREEN_PED_ON_APPROACH,False,0.0,104,False,False,,1.1,50.0
+TC_54_RED_NIGHT_RAIN,False,0.0,133,False,False,,0.6,19.7
+TC_57_LEFT_TURN_ONCOMING,False,0.0,14,False,False,,16.5,1.6
+TC_60_ONCOMING_NORMAL_PASS,True,100.0,0,False,False,,18.0,10.9

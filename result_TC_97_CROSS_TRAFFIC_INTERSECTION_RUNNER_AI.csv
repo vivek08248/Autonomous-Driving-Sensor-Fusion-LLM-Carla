@@ -1,0 +1,9 @@
+Elapsed_Time_s,Speed_kmh,LiDAR_Dist_m,LLM_Latency_ms,LLM_Intent,Safety_Intervention_Active,Ambiguity_Detected,Collision_Event
+0.0,21.01,50.0,0.0,KEEP_LANE,False,False,False
+0.1,20.92,50.0,0.0,KEEP_LANE,False,False,False
+0.2,20.87,50.0,0.0,KEEP_LANE,False,False,False
+0.3,20.55,50.0,0.0,KEEP_LANE,False,False,False
+0.4,20.24,50.0,0.0,KEEP_LANE,False,False,False
+0.5,20.1,50.0,0.0,KEEP_LANE,False,False,False
+0.6,19.97,50.0,0.0,KEEP_LANE,False,False,False
+0.7,19.84,50.0,0.0,KEEP_LANE,False,False,False
