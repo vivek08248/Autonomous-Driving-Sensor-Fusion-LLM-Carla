@@ -4,41 +4,11 @@
 
 A closed-loop autonomous driving framework that fuses LiDAR, radar, IMU and GNSS data, asks a local LLM (served by Ollama) for high-level driving decisions, and passes every decision through a deterministic safety layer before it reaches the vehicle controllers. Evaluation follows the DriveGPT4-V2 (CVPR 2025) metrics: Driving Score DS = RC x IS, where RC is route completion and IS the infraction score.
 
-## Presentation slides
+## System block diagram
 
-The seminar slides are rendered below (full deck in `docs/presentation/`).
+![System block diagram: sensing, fusion, LLM reasoning, safety validation, trajectory and control, actuation](docs/images/block_diagram.png)
 
-![Slide 1](docs/images/slides/slide_01.png)
-
-![Slide 2](docs/images/slides/slide_02.png)
-
-![Slide 3](docs/images/slides/slide_03.png)
-
-![Slide 4](docs/images/slides/slide_04.png)
-
-![Slide 5](docs/images/slides/slide_05.png)
-
-![Slide 6](docs/images/slides/slide_06.png)
-
-![Slide 7](docs/images/slides/slide_07.png)
-
-![Slide 8](docs/images/slides/slide_08.png)
-
-![Slide 9](docs/images/slides/slide_09.png)
-
-![Slide 10](docs/images/slides/slide_10.png)
-
-![Slide 11](docs/images/slides/slide_11.png)
-
-![Slide 12](docs/images/slides/slide_12.png)
-
-![Slide 13](docs/images/slides/slide_13.png)
-
-![Slide 14](docs/images/slides/slide_14.png)
-
-![Slide 15](docs/images/slides/slide_15.png)
-
-![Slide 16](docs/images/slides/slide_16.png)
+The block diagram follows the seminar's signal and decision flow: sensor acquisition, synchronisation and fusion, scene representation, LLM manoeuvre generation, safety validation, trajectory control and actuation, with evaluation against a baseline.
 
 ## Architecture
 
@@ -117,6 +87,119 @@ The 100 test cases cover: clear lanes and cruising; static obstacles and bypasse
 | LLM share of control steps | 1.3 % | 1.9 % | n/a |
 
 These are short scripted CARLA scenarios and are not directly comparable with the paper's 36 Longest6 routes. The one vehicle collision per model is test case TC_09 (wrong-way oncoming car), recorded before the latest brake-on-oncoming fix. Full tables are in `reports/LLM_Comparison_Report.md` and `reports/drivegpt4_v2_paper_metrics_v2.csv`.
+
+### Per-test-case results (generated from `reports/drivegpt4_v2_paper_metrics_v2.csv`, latest run per case)
+
+| Test case | DS 0.5b | DS 1.5b | RC % (0.5b / 1.5b) | Vehicle coll. (0.5b / 1.5b) | End reason (0.5b / 1.5b) |
+|---|---|---|---|---|---|
+| `TC_01_CLEAR_LANE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_02_STATIC_OBSTACLE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_03_RAIN_AND_OBSTACLE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_04_URBAN_JAYWALKER` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_05_SEMI_RURAL_ENCROACH` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_06_RURAL_SLOW_TRUCK` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_07_2WHEELER_CUT_IN` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_08_NIGHT_VISION_LIMIT` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_09_WRONG_WAY_ONCOMING` | 60.0 | 60.0 | 100.0 / 100.0 | 1 / 1 | route_completed / route_completed |
+| `TC_100_TOTAL_AUTONOMY_GRAND_CHALLENGE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_10_HEAVY_FOG_GRIDLOCK` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_11_ERRATIC_ANIMAL` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_12_SUN_GLARE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_13_TIGHT_CORRIDOR` | 1.27 | 1.27 | 1.3 / 1.3 | 0 / 0 | blocked / blocked |
+| `TC_14_CROSS_TRAFFIC` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_15_CHAOTIC_MIXED` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_16_TRAFFIC_SIGNAL_STOP` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_17_PEDESTRIAN_CROWD` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_18_ANIMAL_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_19_DENSE_TRAFFIC_CONGESTION` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_20_ADVERSE_WEATHER` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_21_AMBIGUOUS_INTERSECTION` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_22_OCCLUDED_PEDESTRIAN` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_23_SIMULTANEOUS_CROSSING` | 59.08 | 100.0 | 59.1 / 100.0 | 0 / 0 | user_skip / route_completed |
+| `TC_24_CONFLICTING_SIGNALS` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_25_SUDDEN_LEAD_BRAKE` | 47.5 | 100.0 | 47.5 / 100.0 | 0 / 0 | user_skip / route_completed |
+| `TC_26_LOW_VISIBILITY_MIXED` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_27_LEAD_SLOW_CRUISE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_28_LEAD_HARD_BRAKE_CLOSE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_29_LEAD_STOP_AND_GO` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_30_PLATOON_FOLLOW` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_31_STATIONARY_QUEUE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_32_STOPPED_TRUCK_IN_LANE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_33_CUT_IN_NEAR` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_34_CUT_IN_AT_SPEED` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_35_BICYCLE_CUT_IN` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_36_MOTORCYCLE_CUT_IN` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_37_PARKED_ROW_RIGHT_LANE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_38_DOUBLE_PARKED_TRUCK` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_39_JAYWALK_WALKING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_40_JAYWALK_RUNNING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_41_CHILD_DART_BETWEEN_PARKED` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_42_PED_STANDING_ROADSIDE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_43_PED_GROUP_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_44_PED_STOPS_IN_LANE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_45_PED_NIGHT_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_46_PED_RAIN_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_47_RED_LIGHT_STOP` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | hold_completed / user_skip |
+| `TC_48_GREEN_LIGHT_PASS` | 100.0 | 8.54 | 100.0 / 8.5 | 0 / 0 | route_completed / user_skip |
+| `TC_49_YELLOW_STOPPABLE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | hold_completed / user_skip |
+| `TC_50_GREEN_TO_RED` | 100.0 | 15.72 | 100.0 / 15.7 | 0 / 0 | hold_completed / user_skip |
+| `TC_51_RED_TO_GREEN_RESUME` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_52_RED_WITH_QUEUE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | hold_completed / route_completed |
+| `TC_53_GREEN_PED_ON_APPROACH` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_54_RED_NIGHT_RAIN` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | hold_completed / route_completed |
+| `TC_55_RIGHT_TURN_CLEAR` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_56_LEFT_TURN_CLEAR` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_57_LEFT_TURN_ONCOMING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_58_RIGHT_TURN_SLOW_LEAD` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_59_STRAIGHT_THROUGH_JUNCTION` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_60_ONCOMING_NORMAL_PASS` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_61_ONCOMING_WITH_PARKED_CAR` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_62_ONCOMING_TRUCK` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_63_CONE_CHICANE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_64_BARRIER_FULL_BLOCK` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_65_SMALL_DEBRIS` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_66_ROADWORK_ZONE` | 100.0 | 5.9 | 100.0 / 5.9 | 0 / 0 | route_completed / blocked |
+| `TC_67_NIGHT_STATIC_CAR` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_68_FOG_STATIC_CAR` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_69_HEAVY_RAIN_LEAD_BRAKE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_70_GLARE_SLOW_LEAD` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_71_WET_ROAD_PED_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_72_DUSK_CYCLIST_AHEAD` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_73_HIGH_SPEED_CLOSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_74_SPEED_LIMIT_CRUISE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_75_NO_ROOM_TO_MOVE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_76_RUSH_HOUR_MIXED` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_77_LEAD_BRAKE_PLUS_PED` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_78_STORM_NIGHT_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_79_MIXED_RULES_VALIDATION` | 76.06 | 36.73 | 76.1 / 36.7 | 0 / 0 | timeout / blocked |
+| `TC_80_EMERGENCY_VEHICLE_APPROACH` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_81_BLIND_SPOT_MERGE_VEHICLE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_82_CONSTRUCTION_LANE_DROP_MERGE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_83_DOORING_BICYCLIST_HAZARD` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_84_CROSSWALK_Z_WALKER_RETREAT` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_85_SCHOOL_BUS_EXTENDED_STOP` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_86_WHEELCHAIR_CROSSING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_87_MOTORCYCLE_FILTERING_SPLITTING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_88_CARRIER_TRUCK_OVERHANG_CARGO` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_89_FALLEN_TREE_BRANCH_OBSTACLE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_90_SLIPPERY_OIL_SLICK_AQUAPLANING` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_91_TUNNEL_LIGHT_TRANSITION` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_92_FREEWAY_ON_RAMP_MERGE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_93_UNPROTECTED_LEFT_TURN_GAP` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_94_REVERSING_OUT_OF_DRIVEWAY` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_95_DOUBLE_PARKED_DELIVERY_VAN` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_96_HIGHWAY_GHOST_DRIVER_DODGE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_97_CROSS_TRAFFIC_INTERSECTION_RUNNER` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_98_MULTI_PEDESTRIAN_ZEBRA_SURGE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+| `TC_99_CONE_SLALOM_WORKZONE` | 100.0 | 100.0 | 100.0 / 100.0 | 0 / 0 | route_completed / route_completed |
+
+### Aggregate comparison (generated from the same CSV)
+
+| Model | Episodes | Mean DS | Mean RC % | Mean IS | Pedestrian coll. | Vehicle coll. | Red-light viol. | Blocked / timeout per 100 | Mean LLM reply (ms) |
+|---|---|---|---|---|---|---|---|---|---|
+| qwen2.5:0.5b | 100 | 97.4 | 97.8 | 1.00 | 0 | 1 | 0 | 2 | 477 |
+| qwen2.5:1.5b | 100 | 93.6 | 94.1 | 0.99 | 0 | 1 | 0 | 3 | 1074 |
+| DriveGPT4-V2 (paper, Longest6) | 36 routes | 70 | 91 | 0.77 | 0.00 | 0.80 | 0.04 | 0.16 | n/a |
 
 ## Known limitations
 
