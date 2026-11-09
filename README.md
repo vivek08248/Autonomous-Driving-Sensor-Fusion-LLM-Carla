@@ -90,6 +90,10 @@ These are short scripted CARLA scenarios and are not directly comparable with th
 
 ## Documentation
 
+- `docs/presentation/Project_Seminar_Vivek_Chakali.pptx` - project seminar slides (Abstract Level Presentation).
+- `docs/images/slides/` - each seminar slide rendered as a PNG (`slide_01.png` to `slide_16.png`), including the block diagrams on slides 3, 4, 9, 10, 11 and 14.
+- `docs/images/embedded/` - pictures and logos embedded in the slides.
+- `docs/base_paper/DriveGPT4-V2_CVPR2025_Xu_et_al.pdf` - the base paper: Xu et al., "DriveGPT4-V2", CVPR 2025.
 - `PROJECT_FIXES_v20.md` - change log (v20 to v26), base-paper parameter table and command cheat sheet.
 - `reports/LLM_Comparison_Report.md` - latest model comparison and per-case table.
 
